@@ -16,8 +16,8 @@ void AwaitNtpTimeResponse::executeStep() {
   if (hasReceivedUdpPacket()) {
     executor.execute(taskFactory->createSynchronizeTimeTask());
   } else if (shouldRetry()) {
-    executor.execute(*new DelayedTask(executor, taskFactory->createAwaitNtpTimeResponseTask(), config.getAwaitResponseRetryDelay(),
-                                      config.getAwaitResponseRetryDelayTimeUnit()));
+    executor.executeWithDelay(taskFactory->createAwaitNtpTimeResponseTask(), config.getAwaitResponseRetryDelay(),
+                              config.getAwaitResponseRetryDelayTimeUnit());
   } else {
     udp.stop();
     executor.execute(sharedState->getFailTask());

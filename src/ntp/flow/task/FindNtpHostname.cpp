@@ -18,8 +18,8 @@ void FindNtpHostname::executeStep() {
   if (result == 1) {
     executor.execute(taskFactory->createRequestNtpTimeTask());
   } else if (shouldRetry()) {
-    executor.execute(*new DelayedTask(executor, taskFactory->createFindNtpHostnameTask(), config.getHostResolutionRetryDelay(),
-                                      config.getHostResolutionRetryDelayTimeUnit()));
+    executor.executeWithDelay(taskFactory->createFindNtpHostnameTask(), config.getHostResolutionRetryDelay(),
+                              config.getHostResolutionRetryDelayTimeUnit());
   } else {
     executor.execute(sharedState->getFailTask());
   }

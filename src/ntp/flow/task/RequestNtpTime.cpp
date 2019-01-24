@@ -17,8 +17,8 @@ void RequestNtpTime::executeStep() {
 
   udp.begin(2390);
   sendNtpPacket(sharedState->getTimeServerIP());
-  executor.execute(*new DelayedTask(executor, taskFactory->createAwaitNtpTimeResponseTask(), config.getFirstResponseDelay(),
-                                    config.getFirstResponseDelayTimeUnit()));
+  executor.executeWithDelay(taskFactory->createAwaitNtpTimeResponseTask(), config.getFirstResponseDelay(),
+                            config.getFirstResponseDelayTimeUnit());
 }
 
 void RequestNtpTime::sendNtpPacket(IPAddress& address) {

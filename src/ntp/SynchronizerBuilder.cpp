@@ -9,8 +9,8 @@ namespace ntp {
 
 SynchronizerBuilder::SynchronizerBuilder() {
   executor = &::executor;
-  successTask = &NullTask::getInstance();
-  failTask = &NullTask::getInstance();
+  successTask = []() {};
+  failTask = []() {};
 }
 
 SynchronizerBuilder& SynchronizerBuilder::withExecutor(Executor& executor) {
@@ -23,18 +23,18 @@ SynchronizerBuilder& SynchronizerBuilder::withConfig(Config& config) {
   return *this;
 }
 
-SynchronizerBuilder& SynchronizerBuilder::withSuccessTask(Runnable& successTask) {
-  SynchronizerBuilder::successTask = &successTask;
+SynchronizerBuilder& SynchronizerBuilder::withSuccessTask(Command successTask) {
+  SynchronizerBuilder::successTask = successTask;
   return *this;
 }
 
-SynchronizerBuilder& SynchronizerBuilder::withFailTask(Runnable& failTask) {
-  SynchronizerBuilder::failTask = &failTask;
+SynchronizerBuilder& SynchronizerBuilder::withFailTask(Command failTask) {
+  SynchronizerBuilder::failTask = failTask;
   return *this;
 }
 
 Runnable* SynchronizerBuilder::build() {
-  ntp::flow::state::SharedState* state = new ntp::flow::state::SharedState(*executor, *config, *successTask, *failTask);
+  ntp::flow::state::SharedState* state = new ntp::flow::state::SharedState(*executor, *config, successTask, failTask);
   ntp::task::TaskFactory* taskFactory = new ntp::task::TaskFactory(state);
 
   return new ntp::StartingTask(state, taskFactory);

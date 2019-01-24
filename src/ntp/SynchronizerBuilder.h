@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Command.h>
 #include <Executor.h>
 #include <Runnable.h>
 #include "ntp/Config.h"
@@ -12,15 +13,15 @@ class SynchronizerBuilder {
 
   SynchronizerBuilder& withExecutor(Executor& executor);
   SynchronizerBuilder& withConfig(Config& config);
-  SynchronizerBuilder& withSuccessTask(Runnable& successTask);
-  SynchronizerBuilder& withFailTask(Runnable& failTask);
+  SynchronizerBuilder& withSuccessTask(Command successTask);
+  SynchronizerBuilder& withFailTask(Command failTask);
   Runnable* build();
 
  private:
   Executor* executor;
   Config* config;
-  Runnable* successTask;
-  Runnable* failTask;
+  Command successTask;
+  Command failTask;
 };
 
 }  // namespace ntp

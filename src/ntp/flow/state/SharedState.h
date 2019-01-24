@@ -2,9 +2,9 @@
 
 #include "Arduino.h"
 
+#include <Command.h>
 #include <Executor.h>
 #include <IPAddress.h>
-#include <Runnable.h>
 #include <WiFiUdp.h>
 #include "ntp/Config.h"
 
@@ -14,7 +14,7 @@ namespace state {
 
 class SharedState {
  public:
-  SharedState(Executor &executor, Config &config, Runnable &successTask, Runnable &failTask)
+  SharedState(Executor &executor, Config &config, Command successTask, Command failTask)
       : executor(executor), config(config), successTask(successTask), failTask(failTask) {
     clear();
   }
@@ -32,10 +32,10 @@ class SharedState {
   Config &getConfig() {
     return config;
   }
-  Runnable &getSuccessTask() {
+  Command getSuccessTask() {
     return successTask;
   }
-  Runnable &getFailTask() {
+  Command getFailTask() {
     return failTask;
   }
 
@@ -61,8 +61,8 @@ class SharedState {
  private:
   Executor &executor;
   Config &config;
-  Runnable &successTask;
-  Runnable &failTask;
+  Command successTask;
+  Command failTask;
 
   uint8_t resolveNameAttempt;
   uint8_t awaitResponseAttempt;
